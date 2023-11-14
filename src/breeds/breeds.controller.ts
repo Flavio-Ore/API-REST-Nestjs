@@ -15,28 +15,26 @@ import { UpdateBreedDto } from './dto/update-breed.dto'
 export class BreedsController {
   constructor (private readonly breedsService: BreedsService) {}
 
-  @Post()
-  create (@Body() createBreedDto: CreateBreedDto) {
+  @Post() create (@Body() createBreedDto: CreateBreedDto) {
     return this.breedsService.create(createBreedDto)
   }
 
-  @Get()
-  findAll () {
+  @Get() findAll () {
     return this.breedsService.findAll()
   }
 
-  @Get(':id')
-  findOne (@Param('id') id: number) {
+  @Get(':id') findOne (@Param('id') id: number) {
     return this.breedsService.findOne(+id)
   }
 
-  @Patch(':id')
-  update (@Param('id') id: number, @Body() updateBreedDto: UpdateBreedDto) {
+  @Patch(':id') update (
+    @Param('id') id: number,
+    @Body() updateBreedDto: UpdateBreedDto,
+  ) {
     return this.breedsService.update(+id, updateBreedDto)
   }
 
-  @Delete(':id')
-  remove (@Param('id') id: number) {
+  @Delete(':id') remove (@Param('id') id: number) {
     return this.breedsService.remove(+id)
   }
 }
