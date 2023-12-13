@@ -36,13 +36,16 @@ export class AuthService {
     if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials')
 
     // Who owns this token? (sub = subject)
-    const payload = { sub: user.email }
-
+    const payload = { email: user.email, role: user.role }
     const token = await this.jwtService.signAsync(payload)
 
     return {
       token,
       email,
     }
+  }
+
+  async profile ({ email, role }: { email: string; role: string }) {
+    if (role) return this.userService.findByEmail(email)
   }
 }

@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { AuthService } from './auth.service'
+import { Auth } from './decorators/auth.decorator'
 import { LoginDto } from './dto/login.dto'
 import { RegisterDto } from './dto/register.dto'
-import { AuthGuard } from './guard/auth.guard'
+import { Role } from './enums/rol.enum'
 import { AuthGuardRequest } from './types/AuthGuardReq'
 
 @Controller('auth')
@@ -17,9 +18,7 @@ export class AuthController {
     return this.authService.login(loginDto)
   }
 
-  @Get('profile') @UseGuards(AuthGuard) profile (
-    @Req() request: AuthGuardRequest,
-  ) {
-    return request.user
+  @Get('profile') @Auth(Role.ADMIN) profile (@Req() request: AuthGuardRequest) {
+    return this.authService.profile(request.user)
   }
 }
