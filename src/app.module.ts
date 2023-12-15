@@ -12,7 +12,7 @@ import { UsersModule } from './users/users.module'
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       port: parseInt(process.env.DB_PORT),
       host: process.env.DB_HOST,
       username: process.env.DB_USERNAME,
@@ -22,6 +22,11 @@ import { UsersModule } from './users/users.module'
       // entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
+      ssl: process.env.DB_SSL === 'true',
+      extra: {
+        ssl:
+          process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : null,
+      },
     }),
     CatsModule,
     BreedsModule,
