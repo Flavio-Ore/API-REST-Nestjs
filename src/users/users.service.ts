@@ -11,21 +11,32 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async create (createUserDto: CreateUserDto) {
+  async create (
+    createUserDto: CreateUserDto,
+  ): ReturnType<Repository<User>['save']> {
     return await this.userRepository.save(createUserDto)
   }
 
   findAll () {
-    return `This action returns all users`
+    return 'finAll was called!'
   }
 
   findOne (id: number) {
     return `This action returns a #${id} user`
   }
 
-  findByEmail (email: string) {
-    return this.userRepository.findOneBy({
+  async findByEmail (email: string): ReturnType<Repository<User>['findOneBy']> {
+    return await this.userRepository.findOneBy({
       email,
+    })
+  }
+
+  async findByEmailWithPassword (
+    email: string,
+  ): ReturnType<Repository<User>['findOne']> {
+    return await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'name', 'email', 'password', 'role'],
     })
   }
 

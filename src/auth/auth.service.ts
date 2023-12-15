@@ -17,7 +17,7 @@ export class AuthService {
   ) {}
 
   async register ({ email, name, password }: RegisterDto) {
-    const user = await this.userService.findByEmail(email)
+    const user = await this.userService.findByEmailWithPassword(email)
 
     if (user) throw new BadRequestException('User already exists')
 
@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   async login ({ email, password }: LoginDto) {
-    const user = await this.userService.findByEmail(email)
+    const user = await this.userService.findByEmailWithPassword(email)
     if (!user) throw new UnauthorizedException('Invalid credentials')
 
     const isPasswordValid = await bcryptjs.compare(password, user.password)
@@ -46,6 +46,6 @@ export class AuthService {
   }
 
   async profile ({ email, role }: { email: string; role: string }) {
-    if (role) return this.userService.findByEmail(email)
+    if (role) return await this.userService.findByEmailWithPassword(email)
   }
 }
