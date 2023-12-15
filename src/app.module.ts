@@ -1,25 +1,29 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { AuthModule } from './auth/auth.module'
+import { BreedsModule } from './breeds/breeds.module'
 import { CatsModule } from './cats/cats.module'
-import { BreedsModule } from './breeds/breeds.module';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [
-    CatsModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      port: 3306,
-      host: 'localhost',
-      username: 'root',
-      password: '123456',
-      database: 'nestjs_debe',
+      port: parseInt(process.env.DB_PORT),
+      host: process.env.DB_HOST,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       // each entity will be saved in a table named exactly as the class name
       // entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
     }),
+    CatsModule,
     BreedsModule,
     UsersModule,
     AuthModule,
